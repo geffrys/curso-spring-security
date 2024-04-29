@@ -41,20 +41,20 @@ public class BasicAuth {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-        UserDetails customer = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("customer"))
-                .roles("CUSTOMER")
-                .build();
-        return new InMemoryUserDetailsManager(admin, customer);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails customer = User.builder()
+//                .username("user")
+//                .password(passwordEncoder().encode("customer"))
+//                .roles("CUSTOMER")
+//                .build();
+//        return new InMemoryUserDetailsManager(admin, customer);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
