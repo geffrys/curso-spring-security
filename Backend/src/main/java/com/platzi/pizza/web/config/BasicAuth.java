@@ -3,9 +3,12 @@ package com.platzi.pizza.web.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +22,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class BasicAuth {
     private final String PIZZAS_ENDPOINT = "/api/pizzas/**";
     private final String ORDERS_ENDPOINT = "/api/orders/**";
+    private final String AUTH_LOGIN_ENDPOINT = "/api/auth/login";
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
                 customized -> {
                     customized
+                            .requestMatchers(HttpMethod.POST, AUTH_LOGIN_ENDPOINT).permitAll()
                             .requestMatchers(HttpMethod.GET, PIZZAS_ENDPOINT).hasAnyRole("ADMIN","CUSTOMER")
                             .requestMatchers(HttpMethod.POST, PIZZAS_ENDPOINT).hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, PIZZAS_ENDPOINT).hasRole("ADMIN")
@@ -39,6 +44,11 @@ public class BasicAuth {
                 Customizer.withDefaults()
         );
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 //    @Bean
